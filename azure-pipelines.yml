@@ -26,5 +26,31 @@ steps:
   inputs:
     script: '"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\bin\msbuild.exe" DivByZeroTest-VS.sln'
 
-
+- task: SynopsysSecurityScan@1
+  displayName: 'Polaris Scan'
+  inputs:
+    polaris_server_url: $(POLARIS_SERVERURL)
+    polaris_access_token: $(POLARIS_ACCESSTOKEN)
+    polaris_assessment_types: 'SAST'
+    polaris_application_name: TJ_Scan-$(Build.Repository.Name)
+    polaris_prcomment_enabled: true
+    polaris_reports_sarif_create: true
+    azure_token: $(System.AccessToken)
+    mark_build_status: 'SucceededWithIssues'
+    # include_diagnostics: true
+- task: ArchiveFiles@2
+  displayName: 'Copy Log Files'
+  condition: succeededOrFailed()
+  enabled: false
+  inputs:
+    rootFolderOrFile: .bridge
+    includeRootFolder: false
+    archiveFile: '$(Build.ArtifactStagingDirectory)/bridge-logs.zip'
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Log Files'
+  condition: succeededOrFailed()
+  enabled: false
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'logs'
 
