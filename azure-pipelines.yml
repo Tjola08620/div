@@ -33,8 +33,8 @@ steps:
     polaris_access_token: $(POLARIS_ACCESSTOKEN)
     polaris_assessment_types: 'SAST'
     polaris_application_name: TJ_Scan-$(Build.Repository.Name)
-    polaris_prcomment_enabled: true
-    polaris_reports_sarif_create: true
+    polaris_prcomment_enabled: false
+    polaris_reports_sarif_create: false
     azure_token: $(System.AccessToken)
     mark_build_status: 'SucceededWithIssues'
     # include_diagnostics: true
